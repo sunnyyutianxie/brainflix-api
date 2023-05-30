@@ -40,7 +40,7 @@ router.post("/", (req, res) => {
   const videosStringified = JSON.stringify(videos);
   fs.writeFileSync("./data/videos.json", videosStringified);
 
-  res.status(201).send("New video successfully posted");
+  res.status(201).send("new video successfully posted");
 });
 
 module.exports = router;
