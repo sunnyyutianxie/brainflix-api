@@ -32,8 +32,14 @@ router.post("/", (req, res) => {
   const video = {
     id: uuidv4(),
     title: req.body.title,
+    channel: "user",
+    image: "./public/images/image0.jpeg",
     description: req.body.description,
+    views: 100,
+    likes: 100,
+    video: "https://project-2-api.herokuapp.com/stream",
     timestamp: Date.now(),
+    comments: [],
   };
   videos.push(video);
 
