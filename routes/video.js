@@ -32,7 +32,7 @@ router.post("/", (req, res) => {
   const video = {
     id: uuidv4(),
     title: req.body.title,
-    channel: "User",
+    channel: "Unknown Identity",
     image: "http://localhost:8080/images/image0.jpeg",
     description: req.body.description,
     views: 100,
