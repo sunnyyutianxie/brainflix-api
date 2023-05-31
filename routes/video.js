@@ -50,4 +50,28 @@ router.post("/", (req, res) => {
   res.status(201).send("new video successfully posted");
 });
 
+router.post("/:videoId/comments", (req, res) => {
+  const videosJSON = fs.readFileSync("./data/videos.json");
+  const videos = JSON.parse(videosJSON);
+
+  const videoId = req.params.videoId;
+
+  const selectedVideo = videos.find((video) => video.id === videoId);
+
+  const comment = {
+    id: uuidv4(),
+    name: "Unknown User",
+    comment: req.body.comment,
+    likes: 0,
+    timestamp: Date.now(),
+  };
+
+  selectedVideo.comments.push(comment);
+
+  const commentsStringified = JSON.stringify(videos);
+  fs.writeFileSync("./data/videos.json", commentsStringified);
+
+  res.status(201).send("new comment successfully posted");
+});
+
 module.exports = router;
