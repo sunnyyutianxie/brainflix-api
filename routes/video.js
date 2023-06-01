@@ -74,4 +74,24 @@ router.post("/:videoId/comments", (req, res) => {
   res.status(201).send("new comment successfully posted");
 });
 
+router.delete("/:videoId/comments", (req, res) => {
+  const videosJSON = fs.readFileSync("./data/videos.json");
+  const videos = JSON.parse(videosJSON);
+
+  const videoId = req.params.videoId;
+
+  const selectedVideo = videos.find((video) => video.id === videoId);
+
+  const selectedCommentIndex = selectedVideo.comments.findIndex(
+    (comment) => comment.id == req.body.commentId
+  );
+
+  selectedVideo.comments.splice(selectedCommentIndex, 1);
+
+  const commentsStringified = JSON.stringify(videos);
+  fs.writeFileSync("./data/videos.json", commentsStringified);
+
+  res.status(201).send("comment deleted");
+});
+
 module.exports = router;
