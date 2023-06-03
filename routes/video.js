@@ -140,9 +140,6 @@ router.put("/:videoId/likes", (req, res) => {
     selectedVideo.likes = formattedNumber;
   }
 
-  console.log(selectedVideo);
-  console.log(selectedVideo.likes);
-
   const commentsStringified = JSON.stringify(videos);
   fs.writeFileSync("./data/videos.json", commentsStringified);
 
