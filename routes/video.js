@@ -25,7 +25,21 @@ router.get("/:videoId", (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+const multer = require("multer");
+// const upload = multer({ dest: "./public/images/" });
+
+const storage = multer.diskStorage({
+  destination: "./public/images/",
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const fileExtension = file.originalname.split(".").pop();
+    cb(null, uniqueSuffix + "." + fileExtension);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+router.post("/", upload.single("image"), (req, res) => {
   const videosJSON = fs.readFileSync("./data/videos.json");
   const videos = JSON.parse(videosJSON);
 
@@ -33,7 +47,13 @@ router.post("/", (req, res) => {
     id: uuidv4(),
     title: req.body.title,
     channel: "Unknown Identity",
-    image: "http://localhost:8080/images/image0.jpeg",
+    // image: "http://localhost:8080/images/image0.jpeg",
+    // image: req.body.image,
+    // image: `http://localhost:8080/images/${req.file.filename}.jpeg`,
+    image: req.file
+      ? `http://localhost:8080/images/${req.file.filename}`
+      : `http://localhost:8080/images/image0.jpeg`,
+
     description: req.body.description,
     views: 100,
     likes: 100,
@@ -43,6 +63,9 @@ router.post("/", (req, res) => {
     comments: [],
   };
   videos.push(video);
+
+  // console.log(req.file.filename);
+  // console.log(video);
 
   const videosStringified = JSON.stringify(videos);
   fs.writeFileSync("./data/videos.json", videosStringified);
