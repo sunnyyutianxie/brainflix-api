@@ -125,9 +125,21 @@ router.put("/:videoId/likes", (req, res) => {
 
   const selectedVideo = videos.find((video) => video.id === videoId);
 
-  selectedVideo.likes = (
-    parseInt(selectedVideo.likes.replace(/,/g, "")) + 1
-  ).toLocaleString();
+  if (typeof selectedVideo.likes == "string") {
+    const numberWithoutCommas = parseInt(
+      selectedVideo.likes.replace(/,/g, ""),
+      10
+    );
+    const incrementedNumber = numberWithoutCommas + 1;
+    const formattedNumber = incrementedNumber.toLocaleString();
+    selectedVideo.likes = formattedNumber;
+  } else {
+    const numberWithoutCommas = selectedVideo.likes;
+    const incrementedNumber = numberWithoutCommas + 1;
+    const formattedNumber = incrementedNumber.toLocaleString();
+    selectedVideo.likes = formattedNumber;
+  }
+
   console.log(selectedVideo);
   console.log(selectedVideo.likes);
 
