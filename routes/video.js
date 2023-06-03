@@ -117,4 +117,24 @@ router.delete("/:videoId/comments", (req, res) => {
   res.status(201).send("comment deleted");
 });
 
+router.put("/:videoId/likes", (req, res) => {
+  const videosJSON = fs.readFileSync("./data/videos.json");
+  const videos = JSON.parse(videosJSON);
+
+  const videoId = req.params.videoId;
+
+  const selectedVideo = videos.find((video) => video.id === videoId);
+
+  selectedVideo.likes = (
+    parseInt(selectedVideo.likes.replace(/,/g, "")) + 1
+  ).toLocaleString();
+  console.log(selectedVideo);
+  console.log(selectedVideo.likes);
+
+  const commentsStringified = JSON.stringify(videos);
+  fs.writeFileSync("./data/videos.json", commentsStringified);
+
+  res.status(201).send("like added");
+});
+
 module.exports = router;
